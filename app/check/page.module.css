@@ -1,0 +1,358 @@
+.checker {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 40px 0 100px;
+}
+
+.title {
+  font-size: clamp(1.8rem, 3vw, 2.4rem);
+  letter-spacing: -0.02em;
+  margin-bottom: 8px;
+}
+
+.subtitle {
+  color: var(--ink-500);
+  margin-bottom: 32px;
+  font-size: 1.05rem;
+}
+
+/* ── card ─────────────────────────────────────────── */
+
+.card {
+  background: var(--paper-strong);
+  border-radius: var(--radius-lg);
+  padding: 28px;
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  box-shadow: var(--shadow);
+  margin-bottom: 24px;
+}
+
+/* ── form ─────────────────────────────────────────── */
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.formFields {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.fieldRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+.fieldGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--ink-500);
+}
+
+.input,
+.select {
+  padding: 12px 14px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--ink-200);
+  background: #f9fafb;
+  font-size: 1rem;
+  font-family: inherit;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.input:focus,
+.select:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(47, 91, 255, 0.1);
+}
+
+.input:disabled,
+.select:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.select {
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath d='M3 5l3 3 3-3' stroke='%234b5563' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  padding-right: 36px;
+}
+
+.verifyBtn {
+  background: var(--accent);
+  color: white;
+  padding: 14px 28px;
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: 1rem;
+  align-self: flex-start;
+  transition: transform 0.2s, box-shadow 0.2s, opacity 0.2s;
+  box-shadow: 0 8px 24px rgba(47, 91, 255, 0.2);
+}
+
+.verifyBtn:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 12px 32px rgba(47, 91, 255, 0.3);
+}
+
+.verifyBtn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+/* ── pipeline ─────────────────────────────────────── */
+
+.pipeline {
+  background: var(--paper-strong);
+  border-radius: var(--radius-lg);
+  padding: 28px 28px 8px;
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  box-shadow: var(--shadow);
+  margin-bottom: 24px;
+}
+
+.pipelineStep {
+  display: flex;
+  gap: 16px;
+  animation: stepIn 0.35s ease-out both;
+}
+
+@keyframes stepIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ── step indicator column ────────────────────────── */
+
+.stepIndicator {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex-shrink: 0;
+  width: 28px;
+}
+
+.stepLine {
+  width: 2px;
+  flex: 1;
+  min-height: 16px;
+  background: var(--ink-200);
+  margin: 6px 0;
+  transition: background 0.4s ease;
+}
+
+.step_done .stepLine {
+  background: var(--mint);
+}
+
+.step_error .stepLine {
+  background: rgba(239, 68, 68, 0.25);
+}
+
+/* ── step content ─────────────────────────────────── */
+
+.stepContent {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding-bottom: 20px;
+  min-height: 52px;
+}
+
+.stepLabel {
+  font-weight: 600;
+  font-size: 0.95rem;
+  line-height: 28px;
+}
+
+.stepDetail {
+  font-size: 0.84rem;
+  color: var(--ink-500);
+  font-family: var(--font-mono), ui-monospace, monospace;
+  word-break: break-all;
+  animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* ── step status colours ──────────────────────────── */
+
+.step_pending .stepLabel {
+  color: var(--ink-500);
+  font-weight: 500;
+}
+
+.step_active .stepLabel {
+  color: var(--accent);
+}
+
+.step_done .stepLabel {
+  color: var(--ink-900);
+}
+
+.step_error .stepLabel {
+  color: #ef4444;
+}
+
+.step_error .stepDetail {
+  color: #dc2626;
+}
+
+/* ── step icons ───────────────────────────────────── */
+
+.stepDot {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 2px solid var(--ink-200);
+  background: var(--paper);
+}
+
+.stepSpinner {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 2.5px solid rgba(47, 91, 255, 0.15);
+  border-top-color: var(--accent);
+  animation: spin 0.7s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.stepCheck {
+  width: 28px;
+  height: 28px;
+  color: var(--mint);
+  animation: popIn 0.3s ease-out;
+}
+
+.stepError {
+  width: 28px;
+  height: 28px;
+  color: #ef4444;
+  animation: popIn 0.3s ease-out;
+}
+
+@keyframes popIn {
+  0%   { transform: scale(0.4); opacity: 0; }
+  60%  { transform: scale(1.15); }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+/* ── success badge ────────────────────────────────── */
+
+.successBadge {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  padding: 44px 28px;
+  background: linear-gradient(135deg, rgba(33, 201, 168, 0.08), rgba(47, 91, 255, 0.05));
+  border: 1px solid rgba(33, 201, 168, 0.2);
+  border-radius: var(--radius-lg);
+  text-align: center;
+  animation: badgeIn 0.5s ease-out;
+}
+
+@keyframes badgeIn {
+  from {
+    opacity: 0;
+    transform: translateY(16px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.bigCheck {
+  width: 72px;
+  height: 72px;
+}
+
+.bigCheckCircle {
+  stroke: var(--mint);
+  stroke-width: 2.5;
+  stroke-dasharray: 152;
+  stroke-dashoffset: 152;
+  animation: drawCircle 0.6s ease-out forwards;
+}
+
+.bigCheckTick {
+  stroke: var(--mint);
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 40;
+  stroke-dashoffset: 40;
+  animation: drawTick 0.35s ease-out 0.5s forwards;
+}
+
+@keyframes drawCircle {
+  to { stroke-dashoffset: 0; }
+}
+
+@keyframes drawTick {
+  to { stroke-dashoffset: 0; }
+}
+
+.successText {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.successText strong {
+  font-size: 1.3rem;
+  color: #0d9488;
+  letter-spacing: -0.01em;
+}
+
+.successText span {
+  color: var(--ink-700);
+  font-size: 1rem;
+}
+
+.mono {
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 0.88rem;
+  color: var(--ink-500);
+}
+
+/* ── responsive ───────────────────────────────────── */
+
+@media (max-width: 520px) {
+  .fieldRow {
+    grid-template-columns: 1fr;
+  }
+
+  .verifyBtn {
+    width: 100%;
+    text-align: center;
+  }
+}
