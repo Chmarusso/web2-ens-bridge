@@ -50,14 +50,55 @@ THIRDWEB_SECRET_KEY=...
 ## Verification Flow
 
 1. **Connect Wallet** — User connects their Ethereum wallet
-2. **Detect ENS** — App auto-detects the wallet's primary ENS name
-3. **Link GitHub** — User authenticates via GitHub OAuth
-4. **Generate Proof** — Server creates a zkTLS/web proof proof via Vouch/vlayer proving the GitHub API response
+2. **Detect ENS** — Select network (Sepolia / Mainnet), detect primary ENS name
+3. **Link GitHub** — User authenticates via GitHub OAuth (fresh token each time)
+4. **Generate Proof** — Server creates a ZK-TLS proof via Vouch/vlayer
 5. **Upload to IPFS** — Proof JSON is stored on IPFS via thirdweb
-6. **Update ENS** — Two `setText` transactions write to the ENS resolver:
-   - `com.github` → GitHub username
-   - `verified:github:proof` → `ipfs://...` URI pointing to proof
+6. **Update ENS** — Two `setText` transactions write to the ENS resolver
 7. **Summary** — All results with links to Etherscan and IPFS
+
+### Data Flow
+
+```
+┌─────────┐     OAuth      ┌──────────┐    GET /user     ┌──────────┐
+│ Browser  │───────────────>│  GitHub   │<────────────────│  vlayer  │
+│ (React)  │<───────────────│  OAuth    │────────────────>│  Prover  │
+└────┬─────┘  access_token  └──────────┘  JSON response   └────┬─────┘
+     │                                                          │
+     │  POST /api/proof/github                                  │
+     │  { githubToken }                                         │
+     │─────────────────────>┌──────────┐  prove(url,headers)    │
+     │                      │ Next.js  │───────────────────────>│
+     │                      │  API     │<───────────────────────│
+     │<─────────────────────│  Routes  │  { proof }             │
+     │  { proof, login }    └────┬─────┘                        │
+     │                           │                              │
+     │  POST /api/ipfs/upload    │  upload via thirdweb         │
+     │  { proof }                │                              │
+     │──────────────────────────>│──────────>┌──────────┐       │
+     │<──────────────────────────│<──────────│   IPFS   │       │
+     │  { cid, uri }            │           └──────────┘       │
+     │                           │                              │
+     │  setText() x2             │                              │
+     │  via wallet               │                              │
+     │──────────────────────────────────────>┌──────────┐       │
+     │                                       │   ENS    │       │
+     │<──────────────────────────────────────│ Registry │       │
+     │  tx confirmed                         └──────────┘       │
+     │                                                          │
+     v                                                          v
+
+ ENS Text Records Written:
+ ┌─────────────────────────────────────────────────────────┐
+ │  com.github             =>  "octocat"                   │
+ │  verified:github:proof  =>  "ipfs://Qm..."             │
+ └─────────────────────────────────────────────────────────┘
+
+ Anyone can verify:
+ ┌──────────┐  getEnsText()  ┌─────┐  fetch proof  ┌──────┐  verify()  ┌────────┐
+ │ Verifier │───────────────>│ ENS │──────────────>│ IPFS │──────────>│ vlayer │
+ └──────────┘                └─────┘               └──────┘           └────────┘
+```
 
 ## ENS Text Records
 

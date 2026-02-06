@@ -95,6 +95,19 @@ export default function Home() {
               </div>
             </details>
             <details className={s.faqItem}>
+              <summary>How is my data kept secure?</summary>
+              <div className={s.faqAnswer}>
+                The proof is generated using TLSNotary — a protocol that lets
+                a Notary attest to the authenticity of data served over a TLS
+                connection without seeing the plaintext. The Notary runs
+                inside a Trusted Execution Environment (TEE), which means
+                even the operator cannot read or tamper with your data. The
+                Notary is economically incentivised to provide honest
+                attestations, so the resulting proof is both cryptographically
+                and economically secured.
+              </div>
+            </details>
+            <details className={s.faqItem}>
               <summary>What does it cost?</summary>
               <div className={s.faqAnswer}>
                 The only cost is the gas fee to set a text record on your ENS
