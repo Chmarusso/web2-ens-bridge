@@ -108,6 +108,28 @@ export default function Home() {
               </div>
             </details>
             <details className={s.faqItem}>
+              <summary>Why is the proof stored on IPFS?</summary>
+              <div className={s.faqAnswer}>
+                IPFS (InterPlanetary File System) is a content-addressed
+                storage network. Every file gets a unique hash (CID) derived
+                from its contents — if a single byte changes, the CID
+                changes. This makes proofs tamper-proof by design: the CID in
+                your ENS record will only ever resolve to the exact proof
+                that was originally uploaded.
+              </div>
+            </details>
+            <details className={s.faqItem}>
+              <summary>Why ENS?</summary>
+              <div className={s.faqAnswer}>
+                ENS (Ethereum Name Service) provides human-readable names
+                backed by Ethereum. By writing the proof&apos;s IPFS URI into an
+                ENS text record, your credential becomes publicly
+                discoverable, tied to your onchain identity, and verifiable
+                by anyone — no proprietary API or centralised database
+                required.
+              </div>
+            </details>
+            <details className={s.faqItem}>
               <summary>What does it cost?</summary>
               <div className={s.faqAnswer}>
                 The only cost is the gas fee to set a text record on your ENS
