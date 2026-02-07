@@ -226,6 +226,17 @@ This is a decentralised identity tool — the entire flow (wallet connection, EN
 **Why not use a simple ETH transfer?**
 ETH transfers work but have downsides for micropayments: they require gas, they're slower (block confirmation), and the fee is denominated in a volatile asset. USDC via state channels provides stable pricing, instant settlement, and zero gas per payment.
 
+## How to Contribute?
+
+PRs are welcome! I'm especially interested in integrations with other Web2 APIs that would be useful for the ENS community — think Twitter/X, LinkedIn, email, Discord, Telegram, domain ownership, or any other identity source that people would want to link to their ENS name.
+
+If you have an idea for a new verification source, open a PR that adds:
+1. An API route under `app/api/proof/` to generate the Web Proof
+2. A step component (or adapter) in the verification wizard
+3. The corresponding ENS text record keys
+
+See [AGENTS.md](./AGENTS.md) for the architecture guide on adding new verification sources.
+
 ## Extending
 
 To add new verification sources (Twitter, email, etc.), see [AGENTS.md](./AGENTS.md).
