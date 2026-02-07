@@ -2,6 +2,9 @@
 
 Prove your Web2 stuff with web proofs and attach it to your ENS. Privacy-preserving, fully verifiable, onchain.
 
+![readme-gif-docs](https://github.com/user-attachments/assets/c1e57c24-3721-4369-bd5b-ff513ae0b521)
+
+
 ## Quick Start
 
 ```bash
