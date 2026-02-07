@@ -142,8 +142,21 @@ export default function Home() {
             <details className={s.faqItem}>
               <summary>What does it cost?</summary>
               <div className={s.faqAnswer}>
-                You need to pay USDC or other tokens for the verification fee to the Notary (to cover TEE infrastructure costs). 
+                You need to pay USDC or other tokens for the verification fee to the Notary (to cover TEE infrastructure costs).
                 There are also gas fees to set a text record on your ENS name.
+              </div>
+            </details>
+            <details className={s.faqItem}>
+              <summary>Why Yellow Network for payments?</summary>
+              <div className={s.faqAnswer}>
+                Each verification costs just 0.10 USDC — paying this on-chain
+                would cost more in gas than the fee itself.{' '}
+                <a href="https://yellow.org" target="_blank" rel="noopener noreferrer">Yellow Network</a>{' '}
+                uses state channels (powered by the Nitro protocol) to enable
+                instant, gasless micropayments. You deposit once into a state
+                channel and then pay for verifications with a single wallet
+                signature — no MetaMask popups, no block confirmations, no
+                approve-then-transfer flow.
               </div>
             </details>
           </div>
