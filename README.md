@@ -4,8 +4,7 @@ Prove your Web2 stuff with web proofs and attach it to your ENS. Privacy-preserv
 
 ![readme-gif-docs](https://github.com/user-attachments/assets/c1e57c24-3721-4369-bd5b-ff513ae0b521)
 
-[Full video demo of this project][https://studio.youtube.com/video/SBywrztz-NY/edit](https://www.youtube.com/watch?v=SBywrztz-NY) 
-Submitted to [ETHGlobal Hackmoney 2026](https://ethglobal.com/showcase/web2ens-g4kd0)
+[Full video demo of this project](https://www.youtube.com/watch?v=SBywrztz-NY) , submitted to [ETHGlobal Hackmoney 2026](https://ethglobal.com/showcase/web2ens-g4kd0)
 ## Quick Start
 
 ```bash
