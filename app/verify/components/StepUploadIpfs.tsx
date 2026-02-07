@@ -39,16 +39,15 @@ export default function StepUploadIpfs() {
       </p>
       {error && <div className={styles.errorBox}>{error}</div>}
       {ipfsCid && (
-        <div className={styles.mono} style={{ fontSize: '0.85rem', wordBreak: 'break-all' }}>
-          <strong>CID:</strong> {ipfsCid}<br />
-          <strong>URI:</strong> {ipfsUri}<br />
+        <div className={styles.info}>
           <a
             href={`https://ipfs.io/ipfs/${ipfsCid}`}
             target="_blank"
             rel="noopener noreferrer"
-            className={styles.link}
+            className={`${styles.mono} ${styles.link}`}
+            style={{ wordBreak: 'break-all' }}
           >
-            View on IPFS gateway
+            {ipfsUri}
           </a>
         </div>
       )}
@@ -62,7 +61,7 @@ export default function StepUploadIpfs() {
           {loading ? 'Uploading...' : 'Upload to IPFS'}
         </button>
       ) : (
-        <button className={styles.actionBtn} onClick={() => setStep('update-ens')}>
+        <button className={styles.actionBtn} onClick={() => setStep('update-ens')} style={{ marginTop: 8 }}>
           Continue
         </button>
       )}

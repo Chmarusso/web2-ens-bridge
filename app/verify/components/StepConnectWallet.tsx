@@ -21,25 +21,35 @@ export default function StepConnectWallet() {
     <div className={styles.card}>
       <h2>Connect your wallet</h2>
       <p>Connect the wallet that manages your ENS name.</p>
-      <ConnectButton className={styles.actionBtn} />
-      {isConnected && chain && (
-        <div className={styles.info} style={{ marginTop: 12 }}>
-          Network: <strong>{chain.name}</strong> (id {chain.id})
-        </div>
-      )}
+      {!isConnected && <ConnectButton className={styles.actionBtn} />}
       {isConnected && address && (
-        <div style={{ display: 'flex', gap: 10, marginTop: 12 }}>
-          <button className={styles.actionBtn} onClick={handleContinue}>
+        <>
+          <div className={styles.info} style={{ justifyContent: 'space-between' }}>
+            <span>
+              Connected <strong className={styles.mono}>{address.slice(0, 6)}...{address.slice(-4)}</strong>
+              {chain && <> on <strong>{chain.name}</strong></>}
+            </span>
+            <button
+              onClick={() => disconnect()}
+              type="button"
+              style={{
+                background: 'none',
+                border: 'none',
+                cursor: 'pointer',
+                fontSize: '1rem',
+                padding: '2px 6px',
+                borderRadius: '6px',
+                opacity: 0.6,
+              }}
+              title="Disconnect wallet"
+            >
+              &#x23FB;
+            </button>
+          </div>
+          <button className={styles.actionBtn} onClick={handleContinue} style={{ marginTop: 12 }}>
             Continue
           </button>
-          <button
-            className={styles.actionBtn}
-            onClick={() => disconnect()}
-            style={{ opacity: 0.6 }}
-          >
-            Disconnect
-          </button>
-        </div>
+        </>
       )}
     </div>
   );

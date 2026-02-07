@@ -22,22 +22,22 @@ export default function Home() {
               Get Verified
             </Link>
             <Link className="cta-secondary" href="/check">
-              Check a Name
+              Verify ENS Records
             </Link>
           </div>
         </section>
 
         {/* ── Video placeholder ── */}
-        <section className={s.video}>
+        {/* <section className={s.video}>
           <div className={s.videoCard}>
             <div className={s.playIcon} aria-hidden="true" />
             <span className={s.videoLabel}>Explainer coming soon</span>
           </div>
-        </section>
+        </section> */}
 
         {/* ── How it works diagram ── */}
         <section className={s.diagram} id="how">
-          <h2 className={s.diagramTitle}>How it works</h2>
+          <h2 className={s.diagramTitle}>How proving works</h2>
           <div className={s.flow}>
             <div className={`${s.node} ${s.nodeWeb2}`}>
               <div className={s.nodeCircle}>Server</div>
@@ -49,9 +49,14 @@ export default function Home() {
               <span className={s.nodeLabel}>Web Proof / zkTLS</span>
             </div>
             <div className={s.connector} aria-hidden="true" />
+            <div className={`${s.node} ${s.nodeIpfs}`}>
+              <div className={s.nodeCircle}>IPFS</div>
+              <span className={s.nodeLabel}>Proof storage</span>
+            </div>
+            <div className={s.connector} aria-hidden="true" />
             <div className={`${s.node} ${s.nodeEns}`}>
               <div className={s.nodeCircle}>ENS</div>
-              <span className={s.nodeLabel}>text record</span>
+              <span className={s.nodeLabel}>Text record</span>
             </div>
           </div>
         </section>
@@ -139,14 +144,14 @@ export default function Home() {
         {/* ── GitHub ── */}
         <section className={s.github}>
           <a
-            href="https://github.com/artur/ens-verified-records"
+            href="https://github.com/Chmarusso/web2-ens-bridge"
             target="_blank"
             rel="noopener noreferrer"
             className={s.githubCard}
           >
             <div className={s.ghIcon} aria-hidden="true" />
             <div className={s.ghText}>
-              <span className={s.ghName}>artur/ens-verified-records</span>
+              <span className={s.ghName}>Chmarusso/web2-ens-bridge</span>
               <span className={s.ghDesc}>
                 Open-source — star, fork, or contribute.
               </span>
@@ -156,17 +161,19 @@ export default function Home() {
 
         {/* ── Author ── */}
         <section className={s.author}>
-          <div className={s.authorAvatar} aria-hidden="true" />
-          <p className={s.authorName}>Your Name</p>
+          <a href="https://github.com/Chmarusso" target="_blank" rel="noopener noreferrer">
+            <div className={s.authorAvatar} aria-hidden="true" />
+          </a>
+          <p className={s.authorName}>Chmarusso</p>
           <p className={s.authorBio}>
-            Builder, Ethereum enthusiast, and ENS advocate. Exploring the
-            intersection of verifiable identity and decentralised naming.
+            Passionate about cryptography, smooth UX in Web3, and open source privacy-driven projects.
           </p>
         </section>
 
         {/* ── Footer ── */}
         <footer className={s.footerBar}>
-          Built with ENS + IPFS + TLSNotary + vlayer and Yellow Network. Open source and onchain.
+          Built with ❤️ for <a href="https://ethglobal.com" target="_blank" rel="noopener noreferrer">ETHGlobal</a> hackathon.
+          <br />Powered by ENS + IPFS + TLSNotary + vlayer and Yellow Network.
         </footer>
       </div>
     </main>
