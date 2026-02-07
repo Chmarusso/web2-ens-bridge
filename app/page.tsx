@@ -45,7 +45,7 @@ export default function Home() {
 
         {/* ── How it works diagram ── */}
         <section className={s.diagram} id="how">
-          <h2 className={s.diagramTitle}>How proving works</h2>
+          <h2 className={s.diagramTitle}>How proving works?</h2>
           <div className={s.flow}>
             <div className={`${s.node} ${s.nodeWeb2}`}>
               <div className={s.nodeCircle}>Server</div>
@@ -65,6 +65,37 @@ export default function Home() {
             <div className={`${s.node} ${s.nodeEns}`}>
               <div className={s.nodeCircle}>ENS</div>
               <span className={s.nodeLabel}>Text record</span>
+            </div>
+          </div>
+        </section>
+
+        {/* ── Why is it useful? ── */}
+        <section className={s.useCases} id="use-cases">
+          <h2 className={s.useCasesTitle}>Why is it useful?</h2>
+          <div className={s.useCasesGrid}>
+            <div className={s.useCaseCard}>
+              <h3 className={s.useCaseHeading}>Verified credentials for compliant stablecoin access</h3>
+              <p className={s.useCaseDesc}>
+                Prove regulated identity signals from platforms like Coinbase, Google, or Stripe for safer USDC flows.
+              </p>
+            </div>
+            <div className={s.useCaseCard}>
+              <h3 className={s.useCaseHeading}>Stronger DAO membership and governance</h3>
+              <p className={s.useCaseDesc}>
+                Verify contributors through GitHub, Discord, or Vercel proofs linked directly to ENS.
+              </p>
+            </div>
+            <div className={s.useCaseCard}>
+              <h3 className={s.useCaseHeading}>Trusted ENS-based communication</h3>
+              <p className={s.useCaseDesc}>
+                Route messages to authenticated profiles backed by Telegram, X, or Discord accounts.
+              </p>
+            </div>
+            <div className={s.useCaseCard}>
+              <h3 className={s.useCaseHeading}>Identity layer for AI agents</h3>
+              <p className={s.useCaseDesc}>
+                Agents can verify counterparties and permissions using proofs from Google Workspace, GitHub, or Reddit.
+              </p>
             </div>
           </div>
         </section>
