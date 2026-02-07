@@ -40,51 +40,30 @@
   flex-wrap: wrap;
 }
 
-/* ── Video placeholder ── */
+/* ── Video ── */
 .video {
   padding: 40px 0;
 }
 
 .videoCard {
+  position: relative;
   aspect-ratio: 16 / 9;
   max-width: 720px;
   margin: 0 auto;
   border-radius: var(--radius-lg);
+  overflow: hidden;
   background: var(--paper-strong);
   border: 1px solid rgba(15, 23, 42, 0.08);
   box-shadow: var(--shadow);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 14px;
-  color: var(--ink-500);
 }
 
-.playIcon {
-  width: 56px;
-  height: 56px;
-  border-radius: 50%;
-  background: rgba(47, 91, 255, 0.10);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.playIcon::after {
-  content: '';
-  display: block;
-  width: 0;
-  height: 0;
-  margin-left: 4px;
-  border-top: 10px solid transparent;
-  border-bottom: 10px solid transparent;
-  border-left: 16px solid var(--accent);
-}
-
-.videoLabel {
-  font-size: 0.95rem;
-  font-weight: 600;
+.videoCard iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
 }
 
 /* ── How it works diagram ── */

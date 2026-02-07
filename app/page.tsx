@@ -27,13 +27,21 @@ export default function Home() {
           </div>
         </section>
 
-        {/* ── Video placeholder ── */}
-        {/* <section className={s.video}>
+        {/* ── Video ── */}
+        <section className={s.video}>
           <div className={s.videoCard}>
-            <div className={s.playIcon} aria-hidden="true" />
-            <span className={s.videoLabel}>Explainer coming soon</span>
+            <iframe
+              width="560"
+              height="315"
+              src="https://www.youtube.com/embed/SBywrztz-NY?si=mHopP5TAbB06pT3F"
+              title="YouTube video player"
+              frameBorder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              referrerPolicy="strict-origin-when-cross-origin"
+              allowFullScreen
+            />
           </div>
-        </section> */}
+        </section>
 
         {/* ── How it works diagram ── */}
         <section className={s.diagram} id="how">
