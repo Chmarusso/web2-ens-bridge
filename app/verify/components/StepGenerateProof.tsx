@@ -5,7 +5,7 @@ import { useVerificationStore } from '@/app/lib/store';
 import styles from '../page.module.css';
 
 export default function StepGenerateProof() {
-  const { githubToken, githubLogin, setProof, setStep, setError, error } =
+  const { githubToken, githubLogin, selectedProverId, paymentReceipt, setProof, setStep, setError, error } =
     useVerificationStore();
   const [loading, setLoading] = useState(false);
 
@@ -16,7 +16,11 @@ export default function StepGenerateProof() {
       const res = await fetch('/api/proof/github', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ githubToken }),
+        body: JSON.stringify({
+          githubToken,
+          proverId: selectedProverId,
+          appSessionId: paymentReceipt?.appSessionId,
+        }),
       });
       const data = await res.json();
       if (!res.ok) {

@@ -1,0 +1,16 @@
+[
+  {
+    "id": "vlayer",
+    "name": "vlayer",
+    "proveUrl": "https://web-prover.vlayer.xyz/api/v1/prove",
+    "verifyUrl": "https://web-prover.vlayer.xyz/api/v1/verify",
+    "price": "0.10",
+    "asset": "ytest.usd",
+    "walletAddress": "0x2C7E2e35c90DDaFD477273bacE2cf44542461E47",
+    "network": {
+      "chainId": 11155111,
+      "name": "Sepolia",
+      "yellowWsUrl": "wss://clearnet-sandbox.yellow.com/ws"
+    }
+  }
+]

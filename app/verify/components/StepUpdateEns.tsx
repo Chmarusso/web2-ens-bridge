@@ -31,7 +31,11 @@ export default function StepUpdateEns() {
   const [txState, setTxState] = useState<TxState>('idle');
 
   const handleUpdateEns = async () => {
-    if (!ensResolver || !ensName || !githubLogin || !ipfsUri) return;
+    if (!ensResolver || !ensName || !githubLogin || !ipfsUri) {
+      console.error('[UpdateENS] Missing required data:', { ensResolver, ensName, githubLogin, ipfsUri });
+      setError('Missing required data — please go back and complete earlier steps.');
+      return;
+    }
 
     setError(null);
     try {

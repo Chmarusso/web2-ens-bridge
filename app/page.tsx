@@ -10,13 +10,12 @@ export default function Home() {
 
         {/* ── Hero ── */}
         <section className={s.hero}>
-          <span className={s.tagline}>Web2 ENS Bridge</span>
           <h1 className={s.heroTitle}>
-            Bridge your Web2 identity to ENS.
+            Bridge verified data to ENS.
           </h1>
           <p className={s.heroDesc}>
-            Prove your GitHub, Twitter, or any Web2 account — then attach a
-            verifiable, privacy-preserving credential to your ENS name.
+            Prove your GitHub, Twitter, or any Web data — then attach a
+            verifiable, privacy-preserving proof to your ENS text record.
           </p>
           <div className={s.ctaRow}>
             <Link className="cta-primary" href="/verify">
@@ -41,18 +40,18 @@ export default function Home() {
           <h2 className={s.diagramTitle}>How it works</h2>
           <div className={s.flow}>
             <div className={`${s.node} ${s.nodeWeb2}`}>
-              <div className={s.nodeCircle}>W2</div>
-              <span className={s.nodeLabel}>Web2 Account</span>
+              <div className={s.nodeCircle}>Server</div>
+              <span className={s.nodeLabel}>Web data / JSON</span>
             </div>
             <div className={s.connector} aria-hidden="true" />
             <div className={`${s.node} ${s.nodeZk}`}>
-              <div className={s.nodeCircle}>ZK</div>
-              <span className={s.nodeLabel}>ZK-TLS Proof</span>
+              <div className={s.nodeCircle}>vlayer</div>
+              <span className={s.nodeLabel}>Web Proof / zkTLS</span>
             </div>
             <div className={s.connector} aria-hidden="true" />
             <div className={`${s.node} ${s.nodeEns}`}>
               <div className={s.nodeCircle}>ENS</div>
-              <span className={s.nodeLabel}>ENS Record</span>
+              <span className={s.nodeLabel}>text record</span>
             </div>
           </div>
         </section>
@@ -62,12 +61,12 @@ export default function Home() {
           <h2 className={s.faqTitle}>FAQ</h2>
           <div className={s.faqList}>
             <details className={s.faqItem}>
-              <summary>What is ZK-TLS?</summary>
+              <summary>What is zkTLS / web proof?</summary>
               <div className={s.faqAnswer}>
-                ZK-TLS (Zero-Knowledge Transport Layer Security) lets you prove
+                zkTLS (Zero-Knowledge Transport Layer Security) lets you prove
                 that specific data was served over a TLS connection — without
                 revealing the full response. It turns any HTTPS API into a
-                verifiable data source.
+                verifiable data source. 
               </div>
             </details>
             <details className={s.faqItem}>
@@ -79,11 +78,9 @@ export default function Home() {
               </div>
             </details>
             <details className={s.faqItem}>
-              <summary>Is my Web2 data exposed?</summary>
+              <summary>Is my data exposed?</summary>
               <div className={s.faqAnswer}>
-                No. The ZK proof attests that your account meets certain
-                criteria without leaking the underlying data. Only the claim
-                — not the raw credentials — goes onchain.
+                No. You can reduct any sensitive data from the proof (for example GitHub token). Notary cannot see the plaintext.
               </div>
             </details>
             <details className={s.faqItem}>
@@ -97,7 +94,7 @@ export default function Home() {
             <details className={s.faqItem}>
               <summary>How is my data kept secure?</summary>
               <div className={s.faqAnswer}>
-                The proof is generated using TLSNotary — a protocol that lets
+                The proof is generated using <a href="https://tlsnotary.org">TLSNotary</a> — a protocol that lets
                 a Notary attest to the authenticity of data served over a TLS
                 connection without seeing the plaintext. The Notary runs
                 inside a Trusted Execution Environment (TEE), which means
@@ -110,7 +107,7 @@ export default function Home() {
             <details className={s.faqItem}>
               <summary>Why is the proof stored on IPFS?</summary>
               <div className={s.faqAnswer}>
-                IPFS (InterPlanetary File System) is a content-addressed
+                <a href="https://docs.ipfs.tech">IPFS</a> (InterPlanetary File System) is a content-addressed
                 storage network. Every file gets a unique hash (CID) derived
                 from its contents — if a single byte changes, the CID
                 changes. This makes proofs tamper-proof by design: the CID in
@@ -121,7 +118,7 @@ export default function Home() {
             <details className={s.faqItem}>
               <summary>Why ENS?</summary>
               <div className={s.faqAnswer}>
-                ENS (Ethereum Name Service) provides human-readable names
+                <a href="https://docs.ens.domains">ENS</a> (Ethereum Name Service) provides human-readable names
                 backed by Ethereum. By writing the proof&apos;s IPFS URI into an
                 ENS text record, your credential becomes publicly
                 discoverable, tied to your onchain identity, and verifiable
@@ -132,8 +129,8 @@ export default function Home() {
             <details className={s.faqItem}>
               <summary>What does it cost?</summary>
               <div className={s.faqAnswer}>
-                The only cost is the gas fee to set a text record on your ENS
-                name. Proof generation and verification are free.
+                You need to pay USDC or other tokens for the verification fee to the Notary (to cover TEE infrastructure costs). 
+                There are also gas fees to set a text record on your ENS name.
               </div>
             </details>
           </div>
@@ -169,7 +166,7 @@ export default function Home() {
 
         {/* ── Footer ── */}
         <footer className={s.footerBar}>
-          Built with ENS + ZK-TLS. Open source and onchain.
+          Built with ENS + IPFS + TLSNotary + vlayer and Yellow Network. Open source and onchain.
         </footer>
       </div>
     </main>

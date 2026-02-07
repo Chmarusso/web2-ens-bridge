@@ -33,6 +33,7 @@ app/
     proof/github/route.ts       — Vouch proof generation
     proof/verify/route.ts       — Vouch proof verification
     ipfs/upload/route.ts        — Thirdweb IPFS upload
+    payment/verify/route.ts     — Payment receipt verification (placeholder)
   components/
     ConnectButton.tsx            — Wallet connect/disconnect
     GitHubButton.tsx             — GitHub OAuth + onAuthenticated callback
@@ -41,6 +42,7 @@ app/
   hooks/
     useEnsIdentity.ts            — ENS name + resolver detection
     useSetEnsText.ts             — ENS setText transaction wrapper
+    useYellowPayment.ts          — Yellow Network state channel payment
   lib/
     types.ts                     — Shared TypeScript types
     constants.ts                 — ENS keys, ABI, step config
@@ -53,10 +55,11 @@ app/
       StepConnectWallet.tsx      — Step 1
       StepDetectEns.tsx          — Step 2
       StepConnectGitHub.tsx      — Step 3
-      StepGenerateProof.tsx      — Step 4
-      StepUploadIpfs.tsx         — Step 5
-      StepUpdateEns.tsx          — Step 6
-      StepSummary.tsx            — Step 7
+      StepPayment.tsx            — Step 4 (Yellow Network payment)
+      StepGenerateProof.tsx      — Step 5
+      StepUploadIpfs.tsx         — Step 6
+      StepUpdateEns.tsx          — Step 7
+      StepSummary.tsx            — Step 8
   check/
     page.tsx                     — Proof checker
     page.module.css
@@ -79,6 +82,9 @@ skills/
 | `VOUCH_CLIENT_ID` | Server | Vouch/vlayer web prover client ID |
 | `VOUCH_SECRET_TOKEN` | Server | Vouch/vlayer secret token |
 | `THIRDWEB_SECRET_KEY` | Server | Thirdweb IPFS upload |
+| `NEXT_PUBLIC_YELLOW_WS_URL` | Client | Yellow Network ClearNode WebSocket |
+| `NEXT_PUBLIC_NOTARY_ADDRESS` | Client | Wallet address receiving verification fees |
+| `NEXT_PUBLIC_VERIFICATION_FEE_USDC` | Client | Fee amount in USDC (e.g. "0.10") |
 
 ## Code Conventions
 

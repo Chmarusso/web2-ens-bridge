@@ -28,6 +28,11 @@ VOUCH_SECRET_TOKEN=...
 
 # Thirdweb (IPFS storage)
 THIRDWEB_SECRET_KEY=...
+
+# Yellow Network (state channel payments)
+NEXT_PUBLIC_YELLOW_WS_URL=wss://clearnet-sandbox.yellow.com/ws
+NEXT_PUBLIC_NOTARY_ADDRESS=0x...
+NEXT_PUBLIC_VERIFICATION_FEE_USDC=0.10
 ```
 
 ## Routes
@@ -35,7 +40,7 @@ THIRDWEB_SECRET_KEY=...
 | Route | Description |
 |-------|-------------|
 | `/` | Landing page |
-| `/verify` | 7-step verification wizard |
+| `/verify` | 8-step verification wizard |
 | `/check` | Public proof checker (no wallet required) |
 
 ## API Routes
@@ -46,16 +51,18 @@ THIRDWEB_SECRET_KEY=...
 | `/api/proof/github` | POST | Generate Web Proof of GitHub identity via vlayer |
 | `/api/proof/verify` | POST | Verify a proof's cryptographic validity |
 | `/api/ipfs/upload` | POST | Upload proof JSON to IPFS |
+| `/api/payment/verify` | POST | Verify payment receipt (placeholder) |
 
 ## Verification Flow
 
 1. **Connect Wallet** — User connects their Ethereum wallet
 2. **Detect ENS** — Select network (Sepolia / Mainnet), detect primary ENS name
 3. **Link GitHub** — User authenticates via GitHub OAuth (fresh token each time)
-4. **Generate Proof** — Server creates a Web Proof via vlayer (powered by TLSNotary)
-5. **Upload to IPFS** — Proof JSON is stored on IPFS via thirdweb
-6. **Update ENS** — Two `setText` transactions write to the ENS resolver
-7. **Summary** — All results with links to Etherscan and IPFS
+4. **Payment** — User pays a verification fee via Yellow Network state channels
+5. **Generate Proof** — Server creates a Web Proof via vlayer (powered by TLSNotary)
+6. **Upload to IPFS** — Proof JSON is stored on IPFS via thirdweb
+7. **Update ENS** — Two `setText` transactions write to the ENS resolver
+8. **Summary** — All results with links to Etherscan and IPFS
 
 ### Data Flow
 
@@ -128,6 +135,16 @@ The proof is created using [vlayer](https://vlayer.xyz), which is powered by [TL
 - **Zustand** (state management)
 - **[vlayer](https://vlayer.xyz)** (Web Proofs, powered by [TLSNotary](https://tlsnotary.org))
 - **thirdweb** (IPFS storage)
+- **[Yellow Network](https://yellow.org)** (state channel payments via `@erc7824/nitrolite`)
+
+## Testing with Testnet USDC
+
+The payment step uses Yellow Network's sandbox environment by default.
+
+1. **Get Sepolia ETH** — [sepoliafaucet.com](https://sepoliafaucet.com) or [Chainlink faucet](https://faucets.chain.link/sepolia)
+2. **Get testnet USDC** — [Circle faucet](https://faucet.circle.com) (USDC on Sepolia)
+3. **Set up Yellow channel** — [apps.yellow.com](https://apps.yellow.com) to deposit testnet USDC into a state channel
+4. **Sandbox WebSocket** — `wss://clearnet-sandbox.yellow.com/ws` (default in `.env.example`)
 
 ## Extending
 

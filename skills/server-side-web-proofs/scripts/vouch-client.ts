@@ -28,6 +28,10 @@ export const VOUCH_CONFIG = {
 export interface VouchCredentials {
   clientId: string;
   secretToken: string;
+  /** Override the default prove URL */
+  proveUrl?: string;
+  /** Override the default verify URL */
+  verifyUrl?: string;
 }
 
 /**
@@ -134,7 +138,8 @@ export class VouchClient {
       requestBody.redaction = request.redaction;
     }
 
-    const response = await fetch(VOUCH_CONFIG.PROVE_URL, {
+    const proveUrl = this.credentials.proveUrl || VOUCH_CONFIG.PROVE_URL;
+    const response = await fetch(proveUrl, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -157,7 +162,8 @@ export class VouchClient {
    * @see https://docs.vlayer.xyz/server-side/rest-api/verify
    */
   async verifyWebProof(proof: WebProof): Promise<VerificationResult> {
-    const response = await fetch(VOUCH_CONFIG.VERIFY_URL, {
+    const verifyUrl = this.credentials.verifyUrl || VOUCH_CONFIG.VERIFY_URL;
+    const response = await fetch(verifyUrl, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

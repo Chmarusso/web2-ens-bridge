@@ -9,7 +9,7 @@ export default function StepConnectGitHub() {
 
   const handleAuthenticated = (login: string, token: string) => {
     setGitHub(login, token);
-    setStep('generate-proof');
+    setStep('payment');
   };
 
   return (
