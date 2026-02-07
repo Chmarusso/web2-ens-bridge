@@ -116,6 +116,51 @@ Following [ENSIP-5](https://docs.ens.domains/ensip/5) conventions:
 | `com.github` | GitHub username (standard reverse-domain key) |
 | `verified:github:proof` | IPFS URI to the cryptographic proof |
 
+## Yellow Network — How Payments Work
+
+This project uses [Yellow Network](https://yellow.org) state channels for micropayments. Instead of paying gas for an on-chain token transfer every time you verify a credential, funds move instantly through off-chain state channels powered by the [Nitro protocol](https://docs.yellow.org/docs/learn).
+
+### Architecture
+
+```
+┌──────────┐   EIP-712 auth   ┌────────────┐   on-chain custody   ┌──────────────────┐
+│  Browser  │────────────────>│  ClearNode  │<────────────────────│  Custody Contract │
+│  (wagmi)  │<────────────────│  (off-chain)│────────────────────>│  (Sepolia ERC-20) │
+└──────────┘  state updates   └────────────┘   deposit / settle   └──────────────────┘
+```
+
+1. **Deposit** — User deposits USDC into Yellow's on-chain Custody Contract, which credits their off-chain "unified balance" on the ClearNode.
+2. **Authenticate** — The browser wallet signs an EIP-712 typed message (gasless) to prove identity. An ephemeral session key is created for the payment session.
+3. **Create App Session** — An off-chain session is opened between the user and the prover/notary, locking the verification fee from the user's balance.
+4. **Close App Session** — The session is closed with final allocations that transfer the fee to the prover. Both parties sign the state update.
+5. **Settlement** — Funds are instantly available in the prover's off-chain balance. Either party can force on-chain settlement at any time via the dispute mechanism.
+
+### Key Properties
+
+- **Instant** — Payments settle in < 1 second (no block confirmations needed)
+- **Gasless** — Only EIP-712 signatures, no transaction gas for the payment itself
+- **Secure** — Cryptographically enforced via Nitro protocol; funds are always recoverable on-chain
+- **Micropayment-friendly** — Fixed cost per verification (0.10 USDC) without per-transaction gas overhead
+
+### SDK
+
+The project uses [`@erc7824/nitrolite`](https://www.npmjs.com/package/@erc7824/nitrolite) — Yellow Network's TypeScript SDK for state channel operations. Key functions used:
+
+- `createAuthRequestMessage` / `createAuthVerifyMessage` — WebSocket authentication
+- `createAppSessionMessage` / `createCloseAppSessionMessage` — Payment session lifecycle
+- `createGetLedgerTransactionsMessageV2` / `createGetAppSessionsMessageV2` — Querying payment history (V2 variants require no authentication)
+- `createEIP712AuthMessageSigner` / `createECDSAMessageSigner` — Wallet and session key signers
+
+### Verification Script
+
+A standalone script queries the ClearNode to verify payments between any two addresses i used for testing (my wallet and notary wallet that gets money for proving):
+
+```bash
+npx tsx scripts/verify-payment.ts
+```
+
+It checks ledger balances, transaction history, closed app sessions, and on-chain state channels — all without needing a private key (uses unsigned V2 queries).
+
 ## Security & Data Integrity
 
 **How is the proof generated securely?**
@@ -126,6 +171,15 @@ The proof is created using [vlayer](https://vlayer.xyz), which is powered by [TL
 
 **Why ENS?**
 [ENS](https://ens.domains) (Ethereum Name Service) provides human-readable names backed by Ethereum. By writing the proof's IPFS URI into an ENS text record, the credential becomes publicly discoverable, tied to your onchain identity, and verifiable by anyone — no proprietary API or centralised database required. ENS text records follow the open [ENSIP-5](https://docs.ens.domains/ensip/5) standard, so any app or contract can read them.
+
+**Why Yellow Network?**
+[Yellow Network](https://yellow.org) provides state channel infrastructure built on the [Nitro protocol](https://docs.yellow.org/docs/learn). There are several reasons it was chosen for this project:
+
+- **Micropayments without gas overhead** — Each ENS verification costs 0.10 USDC. Paying this on-chain would cost more in gas than the fee itself. State channels let the user pay once to deposit into a channel, then make unlimited instant payments off-chain.
+- **UX** — The payment happens in the background with a single wallet signature (EIP-712). No MetaMask popups, no waiting for block confirmations, no "approve + transfer" two-step flow.
+- **Crypto-native payment rail** — The alternative would be Stripe or a credit card processor, which defeats the purpose of a decentralised identity tool. Yellow keeps the entire flow wallet-native.
+- **Cryptographic accountability** — Every payment is a signed state update between the user and the prover. Either party can force on-chain settlement if there's a dispute. The ClearNode maintains a double-entry ledger that can be audited via public V2 queries.
+- **Multi-chain unified balance** — Users can deposit USDC on any supported chain (Sepolia, Base, Polygon, Linea) and pay from a single unified off-chain balance. No bridging required.
 
 ## Tech Stack
 
@@ -145,6 +199,29 @@ The payment step uses Yellow Network's sandbox environment by default.
 2. **Get testnet USDC** — [Circle faucet](https://faucet.circle.com) (USDC on Sepolia)
 3. **Set up Yellow channel** — [apps.yellow.com](https://apps.yellow.com) to deposit testnet USDC into a state channel
 4. **Sandbox WebSocket** — `wss://clearnet-sandbox.yellow.com/ws` (default in `.env.example`)
+
+## FAQ
+
+**Why use Yellow Network instead of a direct on-chain payment?**
+A single ENS verification costs 0.10 USDC. An on-chain ERC-20 transfer on Ethereum mainnet can cost $1–5 in gas — 10–50x the actual fee. Even on L2s, the gas cost can rival the payment amount. Yellow Network state channels let users deposit once and then make unlimited instant micropayments with zero gas per payment. The only on-chain transactions are the initial deposit and (optional) final withdrawal.
+
+**Does the user need to set up a Yellow Network account first?**
+Yes. Before paying, the user needs to deposit testnet USDC (or real USDC in production) into a Yellow Network state channel via [apps.yellow.com](https://apps.yellow.com). This is a one-time setup — once funded, the balance can be used across multiple verifications and applications.
+
+**Is the payment real money?**
+In the current deployment, payments use `ytest.usd` on Yellow's sandbox ClearNode (`clearnet-sandbox.yellow.com`). This is testnet play money with no real-world value. For production, the app would switch to the mainnet ClearNode (`clearnet.yellow.com`) and use real USDC.
+
+**Can I verify that a payment actually happened?**
+Yes. Run `npx tsx scripts/verify-payment.ts` to query the ClearNode's public ledger. The script checks ledger balances, transaction history, closed app sessions, and on-chain state channels for both the payer and recipient addresses. All queries use unsigned V2 endpoints — no private key needed.
+
+**What happens if the ClearNode goes down?**
+Yellow Network uses the Nitro protocol, which ensures funds are always recoverable on-chain. If the ClearNode becomes unresponsive, either party can submit the latest mutually-signed state to the on-chain Custody Contract and force settlement after a challenge period. Your funds are never stuck.
+
+**Why not use Stripe or a traditional payment processor?**
+This is a decentralised identity tool — the entire flow (wallet connection, ENS records, IPFS storage, cryptographic proofs) is designed to work without centralised intermediaries. Adding a credit card processor would introduce KYC requirements, geographic restrictions, and a centralised point of failure. Yellow Network keeps payments wallet-native and permissionless.
+
+**Why not use a simple ETH transfer?**
+ETH transfers work but have downsides for micropayments: they require gas, they're slower (block confirmation), and the fee is denominated in a volatile asset. USDC via state channels provides stable pricing, instant settlement, and zero gas per payment.
 
 ## Extending
 

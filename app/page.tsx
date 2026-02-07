@@ -27,13 +27,21 @@ export default function Home() {
           </div>
         </section>
 
-        {/* ── Video placeholder ── */}
-        {/* <section className={s.video}>
+        {/* ── Video ── */}
+        <section className={s.video}>
           <div className={s.videoCard}>
-            <div className={s.playIcon} aria-hidden="true" />
-            <span className={s.videoLabel}>Explainer coming soon</span>
+            <iframe
+              width="560"
+              height="315"
+              src="https://www.youtube.com/embed/SBywrztz-NY?si=mHopP5TAbB06pT3F"
+              title="YouTube video player"
+              frameBorder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              referrerPolicy="strict-origin-when-cross-origin"
+              allowFullScreen
+            />
           </div>
-        </section> */}
+        </section>
 
         {/* ── How it works diagram ── */}
         <section className={s.diagram} id="how">
@@ -134,8 +142,21 @@ export default function Home() {
             <details className={s.faqItem}>
               <summary>What does it cost?</summary>
               <div className={s.faqAnswer}>
-                You need to pay USDC or other tokens for the verification fee to the Notary (to cover TEE infrastructure costs). 
+                You need to pay USDC or other tokens for the verification fee to the Notary (to cover TEE infrastructure costs).
                 There are also gas fees to set a text record on your ENS name.
+              </div>
+            </details>
+            <details className={s.faqItem}>
+              <summary>Why Yellow Network for payments?</summary>
+              <div className={s.faqAnswer}>
+                Each verification costs just 0.10 USDC — paying this on-chain
+                would cost more in gas than the fee itself.{' '}
+                <a href="https://yellow.org" target="_blank" rel="noopener noreferrer">Yellow Network</a>{' '}
+                uses state channels (powered by the Nitro protocol) to enable
+                instant, gasless micropayments. You deposit once into a state
+                channel and then pay for verifications with a single wallet
+                signature — no MetaMask popups, no block confirmations, no
+                approve-then-transfer flow.
               </div>
             </details>
           </div>
