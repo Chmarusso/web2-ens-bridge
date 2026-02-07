@@ -14,8 +14,8 @@ export default function Home() {
             Bridge verified data to ENS.
           </h1>
           <p className={s.heroDesc}>
-            Prove your GitHub, Twitter, or any Web data — then attach a
-            verifiable, privacy-preserving proof to your ENS text record.
+            Prove your GitHub, Twitter, or any data and attach a
+            web proof to your ENS text record.
           </p>
           <div className={s.ctaRow}>
             <Link className="cta-primary" href="/verify">
