@@ -65,6 +65,21 @@ export interface ProofVerificationResult {
   serverDomain: string;
   githubLogin: string | null;
   notaryKeyFingerprint: string;
+  request?: {
+    method: string;
+    url?: string;
+    version?: string;
+    headers?: Array<[string, string]>;
+    body?: string;
+    parsingSuccess?: boolean;
+  };
+  response?: {
+    status: number;
+    version?: string;
+    headers?: Array<[string, string]>;
+    body?: string;
+    parsingSuccess?: boolean;
+  };
 }
 
 /** Result from uploading to IPFS */

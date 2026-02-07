@@ -162,7 +162,7 @@ export default function Home() {
         {/* ── Author ── */}
         <section className={s.author}>
           <a href="https://github.com/Chmarusso" target="_blank" rel="noopener noreferrer">
-            <div className={s.authorAvatar} aria-hidden="true" />
+            <img src="/avatar.jpeg" alt="Chmarusso" className={s.authorAvatar} />
           </a>
           <p className={s.authorName}>Chmarusso</p>
           <p className={s.authorBio}>

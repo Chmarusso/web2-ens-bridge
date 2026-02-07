@@ -42,6 +42,8 @@ export async function POST(req: NextRequest) {
       serverDomain: verification.serverDomain,
       githubLogin,
       notaryKeyFingerprint: verification.notaryKeyFingerprint,
+      request: verification.request,
+      response: verification.response,
     });
   } catch (err) {
     const message = err instanceof Error ? err.message : 'Proof verification failed';
