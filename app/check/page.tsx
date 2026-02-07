@@ -1,6 +1,6 @@
 'use client';
 
-import { Suspense, useState, useMemo, useCallback, useRef } from 'react';
+import { Suspense, useState, useMemo, useCallback, useRef, useEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { createPublicClient, http } from 'viem';
 import { mainnet, sepolia } from 'viem/chains';
@@ -17,12 +17,142 @@ interface PipelineStep {
   label: string;
   status: StepStatus;
   detail?: string;
+  detailLink?: string;
 }
 
 const CHAINS = [
   { id: mainnet.id, label: 'Ethereum Mainnet', chain: mainnet },
   { id: sepolia.id, label: 'Sepolia', chain: sepolia },
 ];
+
+/* ── proof preview modal ─────────────────────────── */
+
+function ProofModal({
+  proof,
+  verification,
+  onClose,
+}: {
+  proof: Record<string, unknown>;
+  verification: ProofVerificationResult | null;
+  onClose: () => void;
+}) {
+  useEffect(() => {
+    const handleKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose();
+    };
+    document.addEventListener('keydown', handleKey);
+    return () => document.removeEventListener('keydown', handleKey);
+  }, [onClose]);
+
+  // Try to pretty-print JSON response body
+  let responseBodyFormatted: string | undefined;
+  if (verification?.response?.body) {
+    try {
+      responseBodyFormatted = JSON.stringify(JSON.parse(verification.response.body), null, 2);
+    } catch {
+      responseBodyFormatted = verification.response.body;
+    }
+  }
+
+  return (
+    <div className={styles.modalOverlay} onClick={onClose}>
+      <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
+        <div className={styles.modalHeader}>
+          <h3 className={styles.modalTitle}>Web Proof / zkTLS</h3>
+          <button className={styles.modalClose} onClick={onClose} aria-label="Close">
+            <svg viewBox="0 0 24 24" fill="none" width="20" height="20">
+              <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+            </svg>
+          </button>
+        </div>
+
+        <div className={styles.modalBody}>
+          {verification ? (
+            <>
+              {/* TLS verification summary */}
+              <div className={styles.proofSection}>
+                <h4 className={styles.proofSectionTitle}>TLS Verification</h4>
+                <div className={styles.proofField}>
+                  <span className={styles.proofFieldLabel}>Status</span>
+                  <span className={verification.success ? styles.proofFieldValueOk : styles.proofFieldValueErr}>
+                    {verification.success ? 'Valid' : 'Failed'}
+                  </span>
+                </div>
+                <div className={styles.proofField}>
+                  <span className={styles.proofFieldLabel}>Server Domain</span>
+                  <span className={styles.proofFieldValue}>{verification.serverDomain}</span>
+                </div>
+                <div className={styles.proofField}>
+                  <span className={styles.proofFieldLabel}>Notary Fingerprint</span>
+                  <span className={styles.proofFieldValue}>{verification.notaryKeyFingerprint}</span>
+                </div>
+              </div>
+
+              {/* Request */}
+              {verification.request && (
+                <div className={styles.proofSection}>
+                  <h4 className={styles.proofSectionTitle}>Verified Request</h4>
+                  <div className={styles.proofField}>
+                    <span className={styles.proofFieldLabel}>Method</span>
+                    <span className={styles.proofFieldValue}>{verification.request.method}</span>
+                  </div>
+                  {verification.request.url && (
+                    <div className={styles.proofField}>
+                      <span className={styles.proofFieldLabel}>URL</span>
+                      <span className={styles.proofFieldValue}>{verification.request.url}</span>
+                    </div>
+                  )}
+                  {verification.request.headers && verification.request.headers.length > 0 && (
+                    <div className={styles.proofField}>
+                      <span className={styles.proofFieldLabel}>Headers</span>
+                      <pre className={styles.proofPre}>
+                        {verification.request.headers.map(([k, v]) => `${k}: ${v}`).join('\n')}
+                      </pre>
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {/* Response */}
+              {verification.response && (
+                <div className={styles.proofSection}>
+                  <h4 className={styles.proofSectionTitle}>Verified Response</h4>
+                  <div className={styles.proofField}>
+                    <span className={styles.proofFieldLabel}>Status</span>
+                    <span className={styles.proofFieldValue}>{verification.response.status}</span>
+                  </div>
+                  {verification.response.headers && verification.response.headers.length > 0 && (
+                    <details className={styles.proofDetails}>
+                      <summary className={styles.proofFieldLabel}>Headers ({verification.response.headers.length})</summary>
+                      <pre className={styles.proofPre}>
+                        {verification.response.headers.map(([k, v]) => `${k}: ${v}`).join('\n')}
+                      </pre>
+                    </details>
+                  )}
+                  {responseBodyFormatted && (
+                    <div className={styles.proofField}>
+                      <span className={styles.proofFieldLabel}>Body</span>
+                      <pre className={styles.proofPre}>{responseBodyFormatted}</pre>
+                    </div>
+                  )}
+                </div>
+              )}
+            </>
+          ) : (
+            /* Fallback: show raw proof JSON */
+            <pre className={styles.proofPre}>{JSON.stringify(proof, null, 2)}</pre>
+          )}
+
+          {/* Raw proof data (collapsed) */}
+          <details className={styles.proofDetails}>
+            <summary className={styles.proofFieldLabel}>Raw Proof ({(proof.data as string)?.length ? `${((proof.data as string).length / 2 / 1024).toFixed(1)} KB hex` : 'n/a'})</summary>
+            <pre className={styles.proofPre}>{JSON.stringify(proof, null, 2)}</pre>
+          </details>
+        </div>
+      </div>
+    </div>
+  );
+}
 
 /* ── tiny step icons ─────────────────────────────── */
 
@@ -72,6 +202,8 @@ function CheckContent() {
   const [steps, setSteps] = useState<PipelineStep[]>([]);
   const [result, setResult] = useState<ProofVerificationResult | null>(null);
   const [showSuccess, setShowSuccess] = useState(false);
+  const [proofData, setProofData] = useState<Record<string, unknown> | null>(null);
+  const [showProofModal, setShowProofModal] = useState(false);
 
   const abortRef = useRef<AbortController | null>(null);
 
@@ -91,11 +223,12 @@ function CheckContent() {
     setRunning(true);
     setResult(null);
     setShowSuccess(false);
+    setProofData(null);
 
     setSteps([
       { id: 'ens', label: 'Resolving ENS records', status: 'pending' },
       { id: 'ipfs', label: 'Fetching proof from IPFS', status: 'pending' },
-      { id: 'verify', label: 'Verifying cryptographic proof', status: 'pending' },
+      { id: 'verify', label: 'Verifying web proof (zkTLS)', status: 'pending' },
       { id: 'match', label: 'Matching records', status: 'pending' },
     ]);
 
@@ -128,11 +261,13 @@ function CheckContent() {
       }
 
       const proofShort = proofUri ? `${proofUri.slice(0, 28)}…` : '';
+      const proofCid = proofUri ? proofUri.replace('ipfs://', '') : '';
       updateStep('ens', {
         status: 'done',
         detail: [handle ? `com.github → ${handle}` : null, proofUri ? `proof → ${proofShort}` : null]
           .filter(Boolean)
           .join('  ·  '),
+        detailLink: proofCid ? `https://ipfs.io/ipfs/${proofCid}` : undefined,
       });
 
       if (!proofUri) {
@@ -153,6 +288,7 @@ function CheckContent() {
         return;
       }
       const proof = await gatewayRes.json();
+      setProofData(proof);
 
       if (abort.signal.aborted) return;
       const sizeKb = (JSON.stringify(proof).length / 1024).toFixed(1);
@@ -220,7 +356,7 @@ function CheckContent() {
     <div className={styles.checker}>
       <h1 className={styles.title}>Verify ENS Records</h1>
       <p className={styles.subtitle}>
-        Cryptographically verify identity records attached to any ENS name.
+        Verify identity records attached to any ENS name using web proofs (zkTLS).
       </p>
 
       {/* ── form ──────────────────────────────────── */}
@@ -300,11 +436,34 @@ function CheckContent() {
               </div>
               <div className={styles.stepContent}>
                 <span className={styles.stepLabel}>{step.label}</span>
-                {step.detail && <span className={styles.stepDetail}>{step.detail}</span>}
+                {step.detail && (
+                  step.detailLink ? (
+                    <a className={styles.stepDetail} href={step.detailLink} target="_blank" rel="noopener noreferrer">
+                      {step.detail}
+                    </a>
+                  ) : (
+                    <span className={styles.stepDetail}>{step.detail}</span>
+                  )
+                )}
               </div>
             </div>
           ))}
         </div>
+      )}
+
+      {/* ── view proof button ────────────────────── */}
+      {proofData && !running && (
+        <button
+          className={styles.viewProofBtn}
+          onClick={() => setShowProofModal(true)}
+        >
+          View Web Proof
+        </button>
+      )}
+
+      {/* ── proof modal ───────────────────────────── */}
+      {showProofModal && proofData && (
+        <ProofModal proof={proofData} verification={result} onClose={() => setShowProofModal(false)} />
       )}
 
       {/* ── success badge ─────────────────────────── */}

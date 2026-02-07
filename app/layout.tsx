@@ -18,9 +18,9 @@ const plexMono = IBM_Plex_Mono({
 });
 
 export const metadata: Metadata = {
-  title: 'ZK Credentials for ENS',
+  title: 'Web2ENS Bridge',
   description:
-    'Prove anything from Web2. Attach it to your ENS name. No doxxing. Fully verifiable.'
+    'Prove web data and attach a verifiable, privacy-preserving proof to your ENS text record.'
 };
 
 export default function RootLayout({ children }: { children: ReactNode }) {

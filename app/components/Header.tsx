@@ -7,7 +7,7 @@ export default function Header() {
     <header className="topbar">
       <Link href="/" className="brand">
         <span className="brand-mark" aria-hidden="true" />
-        <span>ZK Credentials for ENS</span>
+        <span>Web2ENS Bridge</span>
       </Link>
       <nav className="nav">
         <Link href="/verify">Verify</Link>

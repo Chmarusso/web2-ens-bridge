@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import type { Address, Hash } from 'viem';
 import { sepolia } from 'wagmi/chains';
-import type { VerificationState, VerificationStep, WebProofData } from './types';
+import type { PaymentReceipt, PaymentStatus, VerificationState, VerificationStep, WebProofData } from './types';
 
 interface VerificationActions {
   setStep: (step: VerificationStep) => void;
@@ -12,6 +12,9 @@ interface VerificationActions {
   setProof: (proof: WebProofData) => void;
   setIpfs: (cid: string, uri: string) => void;
   addEnsSetTextTx: (hash: Hash) => void;
+  setPaymentStatus: (status: PaymentStatus) => void;
+  setPaymentReceipt: (receipt: PaymentReceipt) => void;
+  setSelectedProver: (proverId: string) => void;
   setError: (error: string | null) => void;
   reset: () => void;
 }
@@ -28,6 +31,9 @@ const initialState: VerificationState = {
   ipfsCid: null,
   ipfsUri: null,
   ensSetTextTxHashes: [],
+  paymentStatus: 'idle',
+  paymentReceipt: null,
+  selectedProverId: null,
   error: null,
 };
 
@@ -53,6 +59,12 @@ export const useVerificationStore = create<VerificationState & VerificationActio
       set((state) => ({
         ensSetTextTxHashes: [...state.ensSetTextTxHashes, hash],
       })),
+
+    setPaymentStatus: (paymentStatus) => set({ paymentStatus }),
+
+    setPaymentReceipt: (paymentReceipt) => set({ paymentReceipt }),
+
+    setSelectedProver: (selectedProverId) => set({ selectedProverId }),
 
     setError: (error) => set({ error }),
 

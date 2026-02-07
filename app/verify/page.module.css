@@ -15,48 +15,40 @@
 }
 
 /* Step indicator */
-.steps {
-  display: flex;
-  gap: 4px;
-  margin-bottom: 40px;
+.stepper {
+  margin-bottom: 32px;
 }
 
-.stepDot {
-  flex: 1;
+.stepperBar {
   height: 4px;
   border-radius: 2px;
   background: var(--ink-200);
-  transition: background 0.3s ease;
+  overflow: hidden;
+  margin-bottom: 10px;
 }
 
-.stepDot.active {
+.stepperFill {
+  height: 100%;
+  border-radius: 2px;
   background: var(--accent);
+  transition: width 0.4s ease;
 }
 
-.stepDot.done {
-  background: var(--mint);
-}
-
-.stepLabels {
+.stepperLabels {
   display: flex;
   justify-content: space-between;
-  margin-bottom: 6px;
+  align-items: center;
 }
 
-.stepLabel {
-  font-size: 0.7rem;
-  color: var(--ink-500);
-  text-align: center;
-  flex: 1;
-}
-
-.stepLabel.active {
-  color: var(--accent);
+.stepperCurrent {
+  font-size: 0.85rem;
   font-weight: 600;
+  color: var(--ink-700);
 }
 
-.stepLabel.done {
-  color: var(--mint);
+.stepperNext {
+  font-size: 0.8rem;
+  color: var(--ink-400);
 }
 
 /* Step card */
@@ -79,13 +71,17 @@
 }
 
 .actionBtn {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
   background: var(--accent);
   color: white;
-  padding: 14px 24px;
+  padding: 14px 48px;
   border-radius: 999px;
   font-weight: 600;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
   box-shadow: 0 8px 24px rgba(47, 91, 255, 0.2);
+  text-align: center;
 }
 
 .actionBtn:hover:not(:disabled) {
@@ -171,6 +167,38 @@
   to { transform: rotate(360deg); }
 }
 
+/* Fact carousel (proof generation) */
+.factCarousel {
+  margin-bottom: 20px;
+  min-height: 56px;
+  display: flex;
+  align-items: center;
+}
+
+.factItem {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 18px;
+  background: rgba(47, 91, 255, 0.06);
+  border: 1px solid rgba(47, 91, 255, 0.15);
+  border-radius: var(--radius-sm);
+  color: var(--ink-700);
+  font-size: 0.95rem;
+  width: 100%;
+  animation: factFadeIn 0.5s ease;
+}
+
+.factBulb {
+  font-size: 1.2rem;
+  flex-shrink: 0;
+}
+
+@keyframes factFadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
 .row {
   display: flex;
   gap: 12px;
@@ -199,8 +227,20 @@
 }
 
 /* Summary */
+.successBadge {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
 .summaryGrid {
   display: grid;
+  gap: 14px;
+}
+
+.summaryRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
   gap: 14px;
 }
 
@@ -216,6 +256,59 @@
   font-size: 0.85rem;
   color: var(--ink-500);
   margin-bottom: 4px;
+}
+
+/* Prover selector */
+.proverGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.proverCard {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 16px;
+  border-radius: var(--radius-sm);
+  border: 1.5px solid var(--ink-200);
+  background: var(--paper);
+  text-align: left;
+  cursor: pointer;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.proverCard:hover:not(:disabled) {
+  border-color: var(--accent);
+}
+
+.proverCard:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.proverCardSelected {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 1.5px var(--accent);
+  background: rgba(47, 91, 255, 0.04);
+}
+
+.proverName {
+  font-weight: 600;
+  font-size: 1rem;
+  color: var(--ink-700);
+}
+
+.proverPrice {
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: var(--accent);
+}
+
+.proverDetail {
+  font-size: 0.8rem;
+  color: var(--ink-500);
 }
 
 .link {

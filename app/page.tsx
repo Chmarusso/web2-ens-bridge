@@ -10,49 +10,53 @@ export default function Home() {
 
         {/* ── Hero ── */}
         <section className={s.hero}>
-          <span className={s.tagline}>Web2 ENS Bridge</span>
           <h1 className={s.heroTitle}>
-            Bridge your Web2 identity to ENS.
+            Bridge verified data to ENS.
           </h1>
           <p className={s.heroDesc}>
-            Prove your GitHub, Twitter, or any Web2 account — then attach a
-            verifiable, privacy-preserving credential to your ENS name.
+            Prove your GitHub, Twitter, or any Web data — then attach a
+            verifiable, privacy-preserving proof to your ENS text record.
           </p>
           <div className={s.ctaRow}>
             <Link className="cta-primary" href="/verify">
               Get Verified
             </Link>
             <Link className="cta-secondary" href="/check">
-              Check a Name
+              Verify ENS Records
             </Link>
           </div>
         </section>
 
         {/* ── Video placeholder ── */}
-        <section className={s.video}>
+        {/* <section className={s.video}>
           <div className={s.videoCard}>
             <div className={s.playIcon} aria-hidden="true" />
             <span className={s.videoLabel}>Explainer coming soon</span>
           </div>
-        </section>
+        </section> */}
 
         {/* ── How it works diagram ── */}
         <section className={s.diagram} id="how">
-          <h2 className={s.diagramTitle}>How it works</h2>
+          <h2 className={s.diagramTitle}>How proving works</h2>
           <div className={s.flow}>
             <div className={`${s.node} ${s.nodeWeb2}`}>
-              <div className={s.nodeCircle}>W2</div>
-              <span className={s.nodeLabel}>Web2 Account</span>
+              <div className={s.nodeCircle}>Server</div>
+              <span className={s.nodeLabel}>Web data / JSON</span>
             </div>
             <div className={s.connector} aria-hidden="true" />
             <div className={`${s.node} ${s.nodeZk}`}>
-              <div className={s.nodeCircle}>ZK</div>
-              <span className={s.nodeLabel}>ZK-TLS Proof</span>
+              <div className={s.nodeCircle}>vlayer</div>
+              <span className={s.nodeLabel}>Web Proof / zkTLS</span>
+            </div>
+            <div className={s.connector} aria-hidden="true" />
+            <div className={`${s.node} ${s.nodeIpfs}`}>
+              <div className={s.nodeCircle}>IPFS</div>
+              <span className={s.nodeLabel}>Proof storage</span>
             </div>
             <div className={s.connector} aria-hidden="true" />
             <div className={`${s.node} ${s.nodeEns}`}>
               <div className={s.nodeCircle}>ENS</div>
-              <span className={s.nodeLabel}>ENS Record</span>
+              <span className={s.nodeLabel}>Text record</span>
             </div>
           </div>
         </section>
@@ -62,12 +66,12 @@ export default function Home() {
           <h2 className={s.faqTitle}>FAQ</h2>
           <div className={s.faqList}>
             <details className={s.faqItem}>
-              <summary>What is ZK-TLS?</summary>
+              <summary>What is zkTLS / web proof?</summary>
               <div className={s.faqAnswer}>
-                ZK-TLS (Zero-Knowledge Transport Layer Security) lets you prove
+                zkTLS (Zero-Knowledge Transport Layer Security) lets you prove
                 that specific data was served over a TLS connection — without
                 revealing the full response. It turns any HTTPS API into a
-                verifiable data source.
+                verifiable data source. 
               </div>
             </details>
             <details className={s.faqItem}>
@@ -79,11 +83,9 @@ export default function Home() {
               </div>
             </details>
             <details className={s.faqItem}>
-              <summary>Is my Web2 data exposed?</summary>
+              <summary>Is my data exposed?</summary>
               <div className={s.faqAnswer}>
-                No. The ZK proof attests that your account meets certain
-                criteria without leaking the underlying data. Only the claim
-                — not the raw credentials — goes onchain.
+                No. You can reduct any sensitive data from the proof (for example GitHub token). Notary cannot see the plaintext.
               </div>
             </details>
             <details className={s.faqItem}>
@@ -97,7 +99,7 @@ export default function Home() {
             <details className={s.faqItem}>
               <summary>How is my data kept secure?</summary>
               <div className={s.faqAnswer}>
-                The proof is generated using TLSNotary — a protocol that lets
+                The proof is generated using <a href="https://tlsnotary.org">TLSNotary</a> — a protocol that lets
                 a Notary attest to the authenticity of data served over a TLS
                 connection without seeing the plaintext. The Notary runs
                 inside a Trusted Execution Environment (TEE), which means
@@ -110,7 +112,7 @@ export default function Home() {
             <details className={s.faqItem}>
               <summary>Why is the proof stored on IPFS?</summary>
               <div className={s.faqAnswer}>
-                IPFS (InterPlanetary File System) is a content-addressed
+                <a href="https://docs.ipfs.tech">IPFS</a> (InterPlanetary File System) is a content-addressed
                 storage network. Every file gets a unique hash (CID) derived
                 from its contents — if a single byte changes, the CID
                 changes. This makes proofs tamper-proof by design: the CID in
@@ -121,7 +123,7 @@ export default function Home() {
             <details className={s.faqItem}>
               <summary>Why ENS?</summary>
               <div className={s.faqAnswer}>
-                ENS (Ethereum Name Service) provides human-readable names
+                <a href="https://docs.ens.domains">ENS</a> (Ethereum Name Service) provides human-readable names
                 backed by Ethereum. By writing the proof&apos;s IPFS URI into an
                 ENS text record, your credential becomes publicly
                 discoverable, tied to your onchain identity, and verifiable
@@ -132,8 +134,8 @@ export default function Home() {
             <details className={s.faqItem}>
               <summary>What does it cost?</summary>
               <div className={s.faqAnswer}>
-                The only cost is the gas fee to set a text record on your ENS
-                name. Proof generation and verification are free.
+                You need to pay USDC or other tokens for the verification fee to the Notary (to cover TEE infrastructure costs). 
+                There are also gas fees to set a text record on your ENS name.
               </div>
             </details>
           </div>
@@ -142,14 +144,14 @@ export default function Home() {
         {/* ── GitHub ── */}
         <section className={s.github}>
           <a
-            href="https://github.com/artur/ens-verified-records"
+            href="https://github.com/Chmarusso/web2-ens-bridge"
             target="_blank"
             rel="noopener noreferrer"
             className={s.githubCard}
           >
             <div className={s.ghIcon} aria-hidden="true" />
             <div className={s.ghText}>
-              <span className={s.ghName}>artur/ens-verified-records</span>
+              <span className={s.ghName}>Chmarusso/web2-ens-bridge</span>
               <span className={s.ghDesc}>
                 Open-source — star, fork, or contribute.
               </span>
@@ -159,17 +161,19 @@ export default function Home() {
 
         {/* ── Author ── */}
         <section className={s.author}>
-          <div className={s.authorAvatar} aria-hidden="true" />
-          <p className={s.authorName}>Your Name</p>
+          <a href="https://github.com/Chmarusso" target="_blank" rel="noopener noreferrer">
+            <img src="/avatar.jpeg" alt="Chmarusso" className={s.authorAvatar} />
+          </a>
+          <p className={s.authorName}>Chmarusso</p>
           <p className={s.authorBio}>
-            Builder, Ethereum enthusiast, and ENS advocate. Exploring the
-            intersection of verifiable identity and decentralised naming.
+            Passionate about cryptography, smooth UX in Web3, and open source privacy-driven projects.
           </p>
         </section>
 
         {/* ── Footer ── */}
         <footer className={s.footerBar}>
-          Built with ENS + ZK-TLS. Open source and onchain.
+          Built with ❤️ for <a href="https://ethglobal.com" target="_blank" rel="noopener noreferrer">ETHGlobal</a> hackathon.
+          <br />Powered by ENS + IPFS + TLSNotary + vlayer and Yellow Network.
         </footer>
       </div>
     </main>

@@ -10,26 +10,26 @@ interface StepIndicatorProps {
 
 export default function StepIndicator({ currentStep }: StepIndicatorProps) {
   const currentIndex = STEPS.findIndex((s) => s.key === currentStep);
+  const nextStep = STEPS[currentIndex + 1];
+  const progress = ((currentIndex + 1) / STEPS.length) * 100;
 
   return (
-    <div>
-      <div className={styles.stepLabels}>
-        {STEPS.map((s, i) => (
-          <span
-            key={s.key}
-            className={`${styles.stepLabel} ${i === currentIndex ? styles.active : ''} ${i < currentIndex ? styles.done : ''}`}
-          >
-            {s.label}
-          </span>
-        ))}
+    <div className={styles.stepper}>
+      <div className={styles.stepperBar}>
+        <div
+          className={styles.stepperFill}
+          style={{ width: `${progress}%` }}
+        />
       </div>
-      <div className={styles.steps}>
-        {STEPS.map((s, i) => (
-          <div
-            key={s.key}
-            className={`${styles.stepDot} ${i === currentIndex ? styles.active : ''} ${i < currentIndex ? styles.done : ''}`}
-          />
-        ))}
+      <div className={styles.stepperLabels}>
+        <span className={styles.stepperCurrent}>
+          {STEPS[currentIndex].label} ({currentIndex + 1}/{STEPS.length})
+        </span>
+        {nextStep && (
+          <span className={styles.stepperNext}>
+            Next: {nextStep.label}
+          </span>
+        )}
       </div>
     </div>
   );
